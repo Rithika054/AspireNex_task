@@ -8,7 +8,7 @@ import traceback
 # Load the model with detailed error handling
 try:
     model = load_model('customer_churn.h5')
-    st.write("Model loaded successfully.")
+    # st.write("Model loaded successfully.")
 except Exception as e:
     st.error(f"Error loading model: {str(e)}")
     st.stop()
