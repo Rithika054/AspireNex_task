@@ -3,9 +3,15 @@ import pandas as pd
 import numpy as np
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
+import traceback
 
 # Load the model
-model = load_model('customer_churn.h5')
+try:
+    model = load_model('customer_churn.h5')
+    st.write("Model loaded successfully.")
+except Exception as e:
+    st.error("Error loading model: " + str(e))
+    st.stop()
 
 # Streamlit app title
 st.title("Customer Churn Prediction")
@@ -84,7 +90,11 @@ st.write(user_input_df)
 
 # Scaling
 scaler = MinMaxScaler()
-user_input_df[['tenure', 'MonthlyCharges', 'TotalCharges']] = scaler.fit_transform(user_input_df[['tenure', 'MonthlyCharges', 'TotalCharges']])
+try:
+    user_input_df[['tenure', 'MonthlyCharges', 'TotalCharges']] = scaler.fit_transform(user_input_df[['tenure', 'MonthlyCharges', 'TotalCharges']])
+except Exception as e:
+    st.error("Error in scaling: " + str(e))
+    st.stop()
 
 # Predict churn
 if st.button("Predict Churn"):
@@ -97,4 +107,5 @@ if st.button("Predict Churn"):
         else:
             st.success(f"Low chance of churn: {churn_prob:.2f}")
     except Exception as e:
-        st.error(f"Error in prediction: {e}")
+        st.error("Error in prediction: " + str(e))
+        st.write(traceback.format_exc())
