@@ -88,10 +88,13 @@ user_input_df[['tenure', 'MonthlyCharges', 'TotalCharges']] = scaler.fit_transfo
 
 # Predict churn
 if st.button("Predict Churn"):
-    prediction = model.predict(user_input_df)
-    churn_prob = prediction[0][0]
+    try:
+        prediction = model.predict(user_input_df)
+        churn_prob = prediction[0][0]
 
-    if churn_prob > 0.5:
-        st.error(f"High chance of churn: {churn_prob:.2f}")
-    else:
-        st.success(f"Low chance of churn: {churn_prob:.2f}")
+        if churn_prob > 0.5:
+            st.error(f"High chance of churn: {churn_prob:.2f}")
+        else:
+            st.success(f"Low chance of churn: {churn_prob:.2f}")
+    except Exception as e:
+        st.error(f"Error in prediction: {e}")
